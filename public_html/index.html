@@ -1,0 +1,126 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>kablaa</title>
+    <link rel="sitemap" type="application/xml" title="Sitemap" href=""/>
+    <link rel="shortcut icon" href="favicon.ico"/>
+    <script src="../js/jquery-1.7.1.min.js"></script>
+    <script src="../js/jquery.terminal-min.js"></script>
+    <link href="../css/jquery.terminal.css" rel="stylesheet"/>
+    
+  </head>
+  
+<body>
+
+<div id="content">
+  
+  
+<!-- begin terminal-->
+<script>
+        var commandText = function(text){
+    return "[[b;#00CC00;]" + text + "]";
+}
+$(function() {
+    var anim = false;
+    function typed(finish_typing) {
+        return function(term, message, delay, finish) {
+            anim = true;
+            var prompt = term.get_prompt();
+            var c = 0;
+            if (message.length > 0) {
+                term.set_prompt('');
+                var interval = setInterval(function() {
+                    term.insert(message[c++]);
+                    if (c == message.length) {
+                        clearInterval(interval);
+                        // execute in next interval
+                        setTimeout(function() {
+                            // swap command with prompt
+                            finish_typing(term, message, prompt);
+                            anim = false
+                            finish && finish();
+                        }, delay);
+                    }
+                }, delay);
+            }
+        };
+    }
+    
+    var typed_message = typed(function(term, message, prompt) {
+        term.set_command('');
+        term.echo(message)
+        term.set_prompt(prompt);
+    });
+    $('body').terminal(function(cmd, term) {
+
+
+        
+         if (cmd == 'ls') {
+        term.echo("\n\nresume --  Find out more about me and what I do.\n" 
+            + commandText("papers") + "-- Read some of what I have written With Dr. Wang. \n" 
+            + "git -- See past projects. \n"
+            + "difeq -- Read my notes on Differential Equations. \n"
+            + "clear -- Clear terminal.\n\n");
+        } else if (cmd == 'papers'){
+            var helpstring =" \n\nI have helped to write several papers with Dr. Wang. " 
+            + "You may select a paper from the following list\n"
+            + "Don't like the terminal? Enter 'gui' to for a list of links to the papers.\n\n"
+            + "papers: \n\n"
+            + "sebo -- Sebo: Selective Bulk Analysis Optimization in Big Data Processing \n\n" 
+            + "cd  -- Go back to main menue\n" 
+            + "ls -- Display this menue \n\n" 
+            term.echo(helpstring);
+            term.push(function(cmd, term) {
+            if (cmd == 'sebo') {
+                window.open("../files/papers/selective.pdf","_self");
+            } else if (cmd == 'gui') {
+                window.open("papers.html","_self");
+            } else if(cmd == 'cd'){
+                term.pop();
+            }else if(cmd == 'ls'){
+                    term.echo(helpstring);
+            }else {
+                term.echo('unknown command "' + cmd + '"');
+            }
+            }, {
+            prompt: 'papers> ',
+            name: 'papers'});
+        } else if (cmd == "resume") {
+            term.echo("opening resume");
+            window.open("../files/resume/resume.pdf","_self");
+        } else if(cmd == 'git'){
+            window.open("https://github.com/kablaa/","_self");
+        } else if(cmd == "difeq"){
+            window.open("../files/DifEq/consolidated.pdf","_self");
+        }else if(cmd == 'clear'){
+            term.clear();
+        }else if(cmd == ""){
+            term.echo("");
+        } else {
+            term.echo("unknown command " + "'" + cmd + "'");
+        }
+            
+    }, {
+        greetings: null,
+        width: 1400,
+        height: 300,
+        onInit: function(term) {
+            // first question
+            var msg = "Welcome, your curiosity has been rewarded. The answers that you seek lie before you. Feel free to explore. \n\n Enter ls for a list of commands \n";
+            typed_message(term, msg, 20, function() {
+            });
+        },
+        keydown: function(e) {
+            //disable keyboard when animating
+            if (anim) {
+                return false;
+            }
+        }
+    });
+});
+
+
+</script>
+</div>
+</body>
