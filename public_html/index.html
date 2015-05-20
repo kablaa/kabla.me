@@ -93,14 +93,17 @@
             + "You may select a paper from the following list.\n"
             + "Don't like the terminal? Enter " +  commandText("gui") + " to for a list of links to the papers.\n\n"
             + "papers: \n\n"
-            + commandText("sebo") + paperText("    Sebo: Selective Bulk Analysis Optimization in Big Data Processing")+ " \n\n" 
+            + commandText("sebo") + paperText("    Sebo: Selective Bulk Analysis Optimization in Big Data Processing")+ "\n" 
+            + commandText("slam") + paperText("    SLAM: Scalable Locality-Aware Middleware for I/O in Scientic Analysis and Visualization") + "\n\n"
             + commandText("cd") + "     Go back to main menue\n" 
             + commandText("ls") + "     Display this menue \n" 
             term.echo(helpstring);
             term.push(function(cmd, term) {
             if (cmd == 'sebo') {
                 window.open("../files/papers/selective.pdf","_self");
-            } else if (cmd == 'gui') {
+                } else if (cmd == 'slam'){
+                    window.open("../files/papers/slam.pdf","_self");
+                }else if (cmd == 'gui') {
                 window.open("papers.html","_self");
             } else if(cmd == 'cd'){
                 term.pop();
